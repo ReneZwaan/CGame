@@ -1,7 +1,91 @@
 #include <Windows.h>
 
-int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR     lpCmdLine, int       nCmdShow)
+
+//typedef struct tagWNDCLASS {
+//	UINT      style;
+//	WNDPROC   lpfnWndProc;
+//	int       cbClsExtra;
+//	int       cbWndExtra;
+//	HINSTANCE hInstance;
+//	HICON     hIcon;
+//	HCURSOR   hCursor;
+//	HBRUSH    hbrBackground;
+//	LPCTSTR   lpszMenuName;
+//	LPCTSTR   lpszClassName;
+//} WNDCLASS, *PWNDCLASS;
+
+
+// Deals with the mssg it gets from windows
+LRESULT CALLBACK HandleMessagesFromWindows(HWND   Window, UINT   Message, WPARAM wParam, LPARAM lParam)
+{
+	LRESULT Result = 0;
+	switch (Message)
+	{
+		case WM_CLOSE: // When the window is closed
+		{
+		
+		}break;
+
+		case WM_DESTROY: //When the window is getting destroyed
+		{
+
+		}break;
+
+		case WM_SIZE: // when the window is resized
+		{
+			
+		}break;
+
+		case WM_ACTIVATEAPP: // when the window is resized
+		{
+
+		}break;
+
+		default:
+			Result = DefWindowProc(Window, Message, wParam, lParam);
+			break;
+	}
+
+	return Result;
+}
+
+int CALLBACK WinMain(HINSTANCE Instance, HINSTANCE PrevInstance, LPSTR     comandLine, int       ShowCode)
 {
 	unsigned int Test;
-	MessageBoxA(0, "Okey :(","Text",MB_OK|MB_ICONINFORMATION);
+	
+	WNDCLASSA windowClass = {};
+	windowClass.style = CS_OWNDC|CS_HREDRAW|CS_VREDRAW ;
+	windowClass.lpfnWndProc = HandleMessagesFromWindows;
+	windowClass.hInstance = Instance;
+	//windowClass.lpszMenuName = "Test";
+	windowClass.lpszClassName = "CGame";
+
+	if (RegisterClassA(&windowClass))
+	{
+
+		HWND WindowHandle = CreateWindowExA(0, windowClass.lpszClassName, "Name??", WS_OVERLAPPEDWINDOW | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, Instance, 0);
+
+		if (WindowHandle)
+		{
+			MSG Message;
+			
+
+			for (;;)
+			{
+				BOOL  messagerResult = GetMessageA(&Message, 0, 0, 0);
+				if (messagerResult > 0)
+				{
+					TranslateMessage(&Message);
+					DispatchMessageA(&Message);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+		}
+
+	}
+	
 }
