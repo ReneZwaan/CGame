@@ -41,6 +41,18 @@ LRESULT CALLBACK HandleMessagesFromWindows(HWND   Window, UINT   Message, WPARAM
 
 		}break;
 
+		case WM_PAINT:
+		{
+			PAINTSTRUCT Paint;
+			HDC deviceContext = BeginPaint(Window,&Paint);
+			int x = Paint.rcPaint.left;
+			int y = Paint.rcPaint.top;
+			int Height = Paint.rcPaint.bottom - Paint.rcPaint.top;
+			int Width = Paint.rcPaint.right - Paint.rcPaint.left;
+			PatBlt(deviceContext, x, y, Width, Height, WHITENESS);
+			EndPaint(Window, &Paint);
+		}break;
+
 		default:
 			Result = DefWindowProc(Window, Message, wParam, lParam);
 			break;
@@ -62,7 +74,6 @@ int CALLBACK WinMain(HINSTANCE Instance, HINSTANCE PrevInstance, LPSTR     coman
 
 	if (RegisterClassA(&windowClass))
 	{
-
 		HWND WindowHandle = CreateWindowExA(0, windowClass.lpszClassName, "Name??", WS_OVERLAPPEDWINDOW | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, Instance, 0);
 
 		if (WindowHandle)
